@@ -1,0 +1,52 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+*.egg-info/
+dist/
+build/
+
+# Java / Maven
+target/
+*.class
+.mvn/wrapper/maven-wrapper.jar
+*.log
+hs_err_pid*
+
+# Node
+node_modules/
+web/dist/
+web/coverage/
+*.tsbuildinfo
+
+# dbt
+warehouse/target/
+warehouse/dbt_packages/
+warehouse/logs/
+warehouse/profiles.yml
+.user.yml
+
+# Data lake and local tooling
+/data/
+
+# Spark
+spark-warehouse/
+metastore_db/
+derby.log
+
+# IDE / OS
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Local env
+.env
+*.local.yml
