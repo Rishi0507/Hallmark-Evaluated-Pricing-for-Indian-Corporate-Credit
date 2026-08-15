@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hallmark.dev/schemas/MarketCurve.json",
+  "title": "MarketCurve",
+  "description": "FBIL G-sec par yield curve (semi-annual compounding, percent) and T-bill curve for one business date.",
+  "type": "object",
+  "required": [
+    "eventId",
+    "eventType",
+    "schemaVersion",
+    "source",
+    "key",
+    "producedAt",
+    "payload"
+  ],
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "description": "Deterministic SHA-256 of type, key, business date and payload; used for de-duplication."
+    },
+    "eventType": {
+      "const": "MarketCurve"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "source": {
+      "type": "string"
+    },
+    "key": {
+      "type": "string"
+    },
+    "businessDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "producedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "payload": {
+      "type": "object",
+      "required": [
+        "asOfDate",
+        "source",
+        "curveType",
+        "points"
+      ],
+      "properties": {
+        "asOfDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "source": {
+          "type": "string"
+        },
+        "curveType": {
+          "enum": [
+            "GSEC_PAR"
+          ]
+        },
+        "compounding": {
+          "enum": [
+            "SEMI_ANNUAL"
+          ]
+        },
+        "points": {
+          "type": "array",
+          "minItems": 4,
+          "items": {
+            "type": "object",
+            "required": [
+              "tenorYears",
+              "parYield"
+            ],
+            "properties": {
+              "tenorYears": {
+                "type": "number"
+              },
+              "parYield": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "tbill": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "tenorDays",
+              "yield"
+            ],
+            "properties": {
+              "tenorDays": {
+                "type": "integer"
+              },
+              "yield": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

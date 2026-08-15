@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hallmark.dev/schemas/ReconBreak.json",
+  "title": "ReconBreak",
+  "description": "A reconciliation exception and its workflow state.",
+  "type": "object",
+  "required": [
+    "eventId",
+    "eventType",
+    "schemaVersion",
+    "source",
+    "key",
+    "producedAt",
+    "payload"
+  ],
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "description": "Deterministic SHA-256 of type, key, business date and payload; used for de-duplication."
+    },
+    "eventType": {
+      "const": "ReconBreak"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "source": {
+      "type": "string"
+    },
+    "key": {
+      "type": "string"
+    },
+    "businessDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "producedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "payload": {
+      "type": "object",
+      "required": [
+        "breakId",
+        "reconType",
+        "breakType",
+        "status",
+        "businessKey"
+      ],
+      "properties": {
+        "breakId": {
+          "type": "string"
+        },
+        "reconType": {
+          "enum": [
+            "TRADE_VS_SETTLEMENT",
+            "YIELD_RECOMPUTE",
+            "REFDATA_SOURCES"
+          ]
+        },
+        "breakType": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "OPEN",
+            "ACKNOWLEDGED",
+            "RESOLVED"
+          ]
+        },
+        "businessKey": {
+          "type": "string"
+        },
+        "businessDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "severity": {
+          "enum": [
+            "LOW",
+            "MEDIUM",
+            "HIGH"
+          ]
+        },
+        "amountLakh": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "details": {
+          "type": "object"
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}
