@@ -1,0 +1,102 @@
+[
+  {
+    "eventId": "535ba14f2e59c53517a0f1f1f7b1372c630fd0f46d2ffe6fb5df4869ee335580",
+    "eventType": "SettlementRecord",
+    "schemaVersion": 1,
+    "source": "hallmark-ingest",
+    "key": "INE476A08282",
+    "businessDate": "2026-10-14",
+    "producedAt": "2026-10-15T14:02:43.785598+00:00",
+    "payload": {
+      "isin": "INE476A08282",
+      "description": "CANARA BANK SR 1 8.10 BD FVRS1CR",
+      "tradeDate": "2026-10-14",
+      "settlementDate": "2026-10-14",
+      "instrumentClass": "BOND",
+      "listing": "LISTED",
+      "counterpartyClass": "MANDATORY",
+      "status": "SETTLED",
+      "quantity": 3,
+      "nominalValueInr": 30000000.0,
+      "wap": 100.31,
+      "way": 8.01,
+      "faceValueInr": 10000000.0,
+      "denominationClass": "INSTITUTIONAL"
+    }
+  },
+  {
+    "eventId": "ba57f0e7724b7ba072124fcae7b635b099cbef56ad7a1917a30af3f5cf21bda6",
+    "eventType": "SettlementRecord",
+    "schemaVersion": 1,
+    "source": "hallmark-ingest",
+    "key": "INE423A07484",
+    "businessDate": "2026-10-14",
+    "producedAt": "2026-10-15T14:02:43.785598+00:00",
+    "payload": {
+      "isin": "INE423A07484",
+      "description": "ADANI ENTERPRISES LIMITED SR I 8.60 NCD 12JN28 FVRS1000",
+      "tradeDate": "2026-10-14",
+      "settlementDate": "2026-10-14",
+      "instrumentClass": "BOND",
+      "listing": "LISTED",
+      "counterpartyClass": "NON_MANDATORY",
+      "status": "SETTLED",
+      "quantity": 256,
+      "nominalValueInr": 256000.0,
+      "wap": 100.14,
+      "way": 8.42,
+      "faceValueInr": 1000.0,
+      "denominationClass": "RETAIL"
+    }
+  },
+  {
+    "eventId": "a9923e3ffc751a0d764fd82b5bbaef1ef289b5facfa593de01949904b5c22e06",
+    "eventType": "SettlementRecord",
+    "schemaVersion": 1,
+    "source": "hallmark-ingest",
+    "key": "INE296A07UB9",
+    "businessDate": "2026-10-14",
+    "producedAt": "2026-10-15T14:02:43.785598+00:00",
+    "payload": {
+      "isin": "INE296A07UB9",
+      "description": "BAJAJ FINANCE LIMITED 7.70 NCD 20SP29 FVRS1LAC",
+      "tradeDate": "2026-10-13",
+      "settlementDate": "2026-10-14",
+      "instrumentClass": "BOND",
+      "listing": "LISTED",
+      "counterpartyClass": "NON_MANDATORY",
+      "status": "SETTLED",
+      "quantity": 2,
+      "nominalValueInr": 200000.0,
+      "wap": 100.37,
+      "way": 7.5,
+      "faceValueInr": 100000.0,
+      "denominationClass": "INSTITUTIONAL"
+    }
+  },
+  {
+    "eventId": "8104c433879fcdb0e8e9907b8b655b72828626398d39fafb14e9fd8aa934d27d",
+    "eventType": "SettlementRecord",
+    "schemaVersion": 1,
+    "source": "hallmark-ingest",
+    "key": "INE786X07BN6",
+    "businessDate": "2026-10-14",
+    "producedAt": "2026-10-15T14:02:43.817132+00:00",
+    "payload": {
+      "isin": "INE786X07BN6",
+      "description": "ORANGE RETAIL FINANCE INDIA PRIVATE LIMITED 12 NCD 29MR29 FVRS10000",
+      "tradeDate": "2026-10-13",
+      "settlementDate": "2026-10-14",
+      "instrumentClass": "BOND",
+      "listing": null,
+      "counterpartyClass": null,
+      "status": "FAILED",
+      "quantity": 12,
+      "nominalValueInr": 120000.0,
+      "wap": 97.3,
+      "way": 14.23,
+      "faceValueInr": 10000.0,
+      "denominationClass": "RETAIL"
+    }
+  }
+]
