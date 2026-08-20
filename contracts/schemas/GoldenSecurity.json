@@ -1,0 +1,339 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hallmark.dev/schemas/GoldenSecurity.json",
+  "title": "GoldenSecurity",
+  "description": "Merged security record with field-level lineage and recorded source conflicts.",
+  "type": "object",
+  "required": [
+    "eventId",
+    "eventType",
+    "schemaVersion",
+    "source",
+    "key",
+    "producedAt",
+    "payload"
+  ],
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "description": "Deterministic SHA-256 of type, key, business date and payload; used for de-duplication."
+    },
+    "eventType": {
+      "const": "GoldenSecurity"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "source": {
+      "type": "string"
+    },
+    "key": {
+      "type": "string"
+    },
+    "businessDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "producedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "payload": {
+      "type": "object",
+      "required": [
+        "isin",
+        "fieldSources"
+      ],
+      "properties": {
+        "isin": {
+          "type": "string",
+          "pattern": "^IN[A-Z0-9]{9}[0-9]$"
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "issuerName": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "issuerKey": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "cin": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "lei": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ownership": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sectorGroup": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "industry": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "instrumentType": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "couponRate": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "couponBasis": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "maturityDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "faceValue": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "denominationClass": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "firstCallDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "firstPutDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "stepUp": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "pricingEligible": {
+          "type": "boolean"
+        },
+        "ineligibleReason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "scheduleWarnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ratings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "agency",
+              "isCurrent"
+            ],
+            "properties": {
+              "agency": {
+                "type": "string"
+              },
+              "rawRating": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "symbol": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "scale": {
+                "enum": [
+                  "LONG",
+                  "SHORT",
+                  null
+                ]
+              },
+              "notch": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 1
+              },
+              "outlook": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "action": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "ratingDate": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date"
+              },
+              "changeDate": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date"
+              },
+              "watch": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "isCurrent": {
+                "type": "boolean"
+              },
+              "creditEnhanced": {
+                "type": "boolean"
+              },
+              "structured": {
+                "type": "boolean"
+              },
+              "provisional": {
+                "type": "boolean"
+              },
+              "withdrawn": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "cashflows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "paymentDate",
+              "amountPerUnit",
+              "principal"
+            ],
+            "properties": {
+              "paymentDate": {
+                "type": "string",
+                "format": "date"
+              },
+              "dueDate": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date"
+              },
+              "amountPerUnit": {
+                "type": "number"
+              },
+              "principal": {
+                "type": "boolean"
+              },
+              "event": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        },
+        "fieldSources": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [],
+            "properties": {
+              "field": {
+                "type": "string"
+              },
+              "chosenSource": {
+                "type": "string"
+              },
+              "chosenValue": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "otherSource": {
+                "type": "string"
+              },
+              "otherValue": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

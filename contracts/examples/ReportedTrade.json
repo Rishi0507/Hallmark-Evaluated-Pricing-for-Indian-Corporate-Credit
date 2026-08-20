@@ -1,0 +1,65 @@
+[
+  {
+    "eventId": "f405ab350740e9ec4cd6360b1d6442ab011018e6110ecc5461e31b9dc19b72f9",
+    "eventType": "ReportedTrade",
+    "schemaVersion": 1,
+    "source": "hallmark-ingest",
+    "key": "INE423A07484",
+    "businessDate": "2026-10-14",
+    "producedAt": "2026-10-15T14:02:43.770407+00:00",
+    "payload": {
+      "isin": "INE423A07484",
+      "tradeDate": "2026-10-14",
+      "venue": "NSE",
+      "instrumentClass": "BOND",
+      "lastPrice": 100.1056,
+      "lastYield": 8.45,
+      "lastTradeValueLakh": 3.0,
+      "totalTradeValueLakh": 8.2,
+      "wap": 100.2166,
+      "way": 8.3535
+    }
+  },
+  {
+    "eventId": "1126f27a83116b9e5c2ba1c3056be8409bf201166e92a0b5bb297f8801a80eb1",
+    "eventType": "ReportedTrade",
+    "schemaVersion": 1,
+    "source": "hallmark-ingest",
+    "key": "INE296A07UB9",
+    "businessDate": "2026-10-14",
+    "producedAt": "2026-10-15T14:02:43.770407+00:00",
+    "payload": {
+      "isin": "INE296A07UB9",
+      "tradeDate": "2026-10-14",
+      "venue": "NSE",
+      "instrumentClass": "BOND",
+      "lastPrice": 97.7909,
+      "lastYield": 8.52,
+      "lastTradeValueLakh": 2500.0,
+      "totalTradeValueLakh": 65000.0,
+      "wap": 97.8023,
+      "way": 8.5154
+    }
+  },
+  {
+    "eventId": "c868e060cfc744c94d78492e3f8cbe3b59960013d7670d564fa13da3b415756c",
+    "eventType": "ReportedTrade",
+    "schemaVersion": 1,
+    "source": "hallmark-ingest",
+    "key": "INE476A08282",
+    "businessDate": "2026-10-14",
+    "producedAt": "2026-10-15T14:02:43.780403+00:00",
+    "payload": {
+      "isin": "INE476A08282",
+      "tradeDate": "2026-10-14",
+      "venue": "NSE",
+      "instrumentClass": "BOND",
+      "lastPrice": 100.31,
+      "lastYield": 8.01,
+      "lastTradeValueLakh": 300.0,
+      "totalTradeValueLakh": 400.0,
+      "wap": 100.2225,
+      "way": 8.0325
+    }
+  }
+]

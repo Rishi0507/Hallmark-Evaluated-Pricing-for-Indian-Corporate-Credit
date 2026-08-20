@@ -1,0 +1,19 @@
+[
+  {
+    "eventId": "9dbfa754b21fc03fd907b423837a1e71b1ad6010ab7413a0ca1886b9dd49d192",
+    "eventType": "EndOfDay",
+    "schemaVersion": 1,
+    "source": "hallmark-ingest",
+    "key": "2026-10-14",
+    "businessDate": "2026-10-14",
+    "producedAt": "2026-10-15T14:02:43.818876+00:00",
+    "payload": {
+      "businessDate": "2026-10-14",
+      "counts": {
+        "reported": 632,
+        "settlements": 911
+      },
+      "curveAvailable": true
+    }
+  }
+]

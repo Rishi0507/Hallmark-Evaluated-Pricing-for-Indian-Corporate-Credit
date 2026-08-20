@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hallmark.dev/schemas/ReportedTrade.json",
+  "title": "ReportedTrade",
+  "description": "Per-ISIN summary of trades reported on NSE for a trade date. Values in Rs lakh of face value, prices per 100 of face value, yields in percent.",
+  "type": "object",
+  "required": [
+    "eventId",
+    "eventType",
+    "schemaVersion",
+    "source",
+    "key",
+    "producedAt",
+    "payload"
+  ],
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "description": "Deterministic SHA-256 of type, key, business date and payload; used for de-duplication."
+    },
+    "eventType": {
+      "const": "ReportedTrade"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "source": {
+      "type": "string"
+    },
+    "key": {
+      "type": "string"
+    },
+    "businessDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "producedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "payload": {
+      "type": "object",
+      "required": [
+        "isin",
+        "tradeDate",
+        "venue",
+        "totalTradeValueLakh"
+      ],
+      "properties": {
+        "isin": {
+          "type": "string",
+          "pattern": "^IN[A-Z0-9]{9}[0-9]$"
+        },
+        "tradeDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "venue": {
+          "const": "NSE"
+        },
+        "instrumentClass": {
+          "enum": [
+            "BOND",
+            "CP",
+            "CD",
+            "GSEC",
+            "OTHER"
+          ]
+        },
+        "lastPrice": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "lastYield": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "lastTradeValueLakh": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "totalTradeValueLakh": {
+          "type": "number"
+        },
+        "wap": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "way": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

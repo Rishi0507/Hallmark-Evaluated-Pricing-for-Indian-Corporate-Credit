@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hallmark.dev/schemas/Mark.json",
+  "title": "Mark",
+  "description": "End-of-day evaluated mark with method, confidence and supporting evidence.",
+  "type": "object",
+  "required": [
+    "eventId",
+    "eventType",
+    "schemaVersion",
+    "source",
+    "key",
+    "producedAt",
+    "payload"
+  ],
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "description": "Deterministic SHA-256 of type, key, business date and payload; used for de-duplication."
+    },
+    "eventType": {
+      "const": "Mark"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "source": {
+      "type": "string"
+    },
+    "key": {
+      "type": "string"
+    },
+    "businessDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "producedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "payload": {
+      "type": "object",
+      "required": [
+        "isin",
+        "valuationDate",
+        "method",
+        "cleanPrice",
+        "yieldPct",
+        "zSpreadBps",
+        "confidence"
+      ],
+      "properties": {
+        "isin": {
+          "type": "string",
+          "pattern": "^IN[A-Z0-9]{9}[0-9]$"
+        },
+        "valuationDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "method": {
+          "enum": [
+            "TRADED",
+            "TRADED_RETAIL",
+            "CARRIED",
+            "ISSUER_CURVE",
+            "MATRIX"
+          ]
+        },
+        "cleanPrice": {
+          "type": "number"
+        },
+        "dirtyPrice": {
+          "type": "number"
+        },
+        "accrued": {
+          "type": "number"
+        },
+        "yieldPct": {
+          "type": "number"
+        },
+        "zSpreadBps": {
+          "type": "number"
+        },
+        "gSpreadBps": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "modifiedDuration": {
+          "type": "number"
+        },
+        "ratingBucket": {
+          "type": "string"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [],
+            "properties": {
+              "kind": {
+                "type": "string"
+              },
+              "isin": {
+                "type": "string"
+              },
+              "date": {
+                "type": "string",
+                "format": "date"
+              },
+              "weight": {
+                "type": "number"
+              },
+              "spreadBps": {
+                "type": "number"
+              },
+              "faceValueLakh": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}
