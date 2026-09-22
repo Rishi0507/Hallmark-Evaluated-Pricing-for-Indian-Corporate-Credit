@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/hallmark?currentSchema=recon}
+    username: ${DB_USER:hallmark}
+    password: ${DB_PASSWORD:hallmark}
+  flyway:
+    schemas: recon
+    default-schema: recon
