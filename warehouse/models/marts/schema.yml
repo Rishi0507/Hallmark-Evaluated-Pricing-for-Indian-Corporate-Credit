@@ -1,0 +1,57 @@
+version: 2
+
+models:
+  - name: dim_security
+    description: Golden security records with the composite (worst current) long-term rating.
+    columns:
+      - name: isin
+        data_tests: [unique, not_null]
+      - name: rating_bucket
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [AAA, AA+, AA, AA-, A+, A, A-, BBB, SUB_IG, D, UNRATED]
+      - name: denomination_class
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [RETAIL, HNI, INSTITUTIONAL, UNKNOWN]
+  - name: fct_daily_market
+    description: Daily NSE bond activity with FBIL G-sec par yields and the USD/INR reference rate.
+    columns:
+      - name: business_date
+        data_tests: [unique, not_null]
+      - name: bonds_traded
+        data_tests: [positive]
+  - name: fct_distribution_monthly
+    description: Settled bond face value by month, denomination class, counterparty class, rating and sector.
+    columns:
+      - name: settled_face_crore
+        data_tests: [not_null, positive]
+  - name: fct_retail_watchlist
+    description: Issuers whose bonds settle in retail denominations, with rating actions and fails.
+    columns:
+      - name: issuer_key
+        data_tests: [unique, not_null]
+  - name: fct_rating_actions_monthly
+    description: Long-term rating actions by month and type.
+  - name: fct_backtest_monthly
+    description: Out-of-sample pricing error by month and method, with naive baselines.
+    columns:
+      - name: predictions
+        data_tests: [positive]
+  - name: fct_recon_summary
+    description: Reconciliation outcomes by control, instrument class, result and break type.
+  - name: fct_marks_latest
+    description: Marks for the latest valuation date with security attributes.
+    columns:
+      - name: isin
+        data_tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_security')
+                field: isin
+      - name: confidence
+        data_tests: [not_null]
