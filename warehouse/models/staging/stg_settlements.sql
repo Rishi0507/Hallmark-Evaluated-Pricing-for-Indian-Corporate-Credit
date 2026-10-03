@@ -1,0 +1,1 @@
+select isin, description, trade_date, settlement_date, instrument_class, listing, counterparty_class, status, nominal_value_inr, wap, way, face_value_inr, denomination_class from {{ silver('settlements') }}

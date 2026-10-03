@@ -1,0 +1,23 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "insights-api"
+version = "0.1.0"
+description = "Read API over the Hallmark warehouse marts: market, distribution, backtest and reconciliation"
+requires-python = ">=3.12"
+dependencies = ["fastapi>=0.115", "uvicorn>=0.34", "duckdb>=1.5", "pydantic-settings>=2.10"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "httpx>=0.28", "ruff>=0.12"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/insights_api"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"

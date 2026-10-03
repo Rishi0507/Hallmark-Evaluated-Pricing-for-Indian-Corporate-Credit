@@ -1,0 +1,20 @@
+name: hallmark
+version: "1.0.0"
+config-version: 2
+profile: hallmark
+
+model-paths: ["models"]
+macro-paths: ["macros"]
+test-paths: ["tests"]
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+vars:
+  silver_path: "../data/silver"
+
+models:
+  hallmark:
+    staging:
+      +materialized: view
+    marts:
+      +materialized: table

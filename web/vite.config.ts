@@ -1,0 +1,18 @@
+import react from "@vitejs/plugin-react";
+import { defineConfig } from "vitest/config";
+
+export default defineConfig({
+  plugins: [react()],
+  base: process.env.PAGES_BASE ?? "/",
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: { charts: ["recharts"], react: ["react", "react-dom"] },
+      },
+    },
+  },
+  test: {
+    environment: "jsdom",
+    setupFiles: ["./src/test/setup.ts"],
+  },
+});

@@ -1,0 +1,17 @@
+hallmark:
+  target: duckdb
+  outputs:
+    duckdb:
+      type: duckdb
+      path: ../data/warehouse.duckdb
+      threads: 4
+    snowflake:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('SNOWFLAKE_USER') }}"
+      authenticator: externalbrowser
+      role: "{{ env_var('SNOWFLAKE_ROLE', 'TRANSFORMER') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'TRANSFORMING') }}"
+      database: "{{ env_var('SNOWFLAKE_DATABASE', 'HALLMARK') }}"
+      schema: marts
+      threads: 8
