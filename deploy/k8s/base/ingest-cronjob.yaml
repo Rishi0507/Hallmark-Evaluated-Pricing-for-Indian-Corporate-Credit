@@ -1,0 +1,41 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ingest-daily
+spec:
+  schedule: "30 13 * * 1-5"
+  timeZone: "Etc/UTC"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: ingest
+              image: hallmark/ingest:latest
+              args: ["daily", "--publish-to", "kafka"]
+              envFrom:
+                - configMapRef: {name: hallmark-config}
+              env:
+                - {name: HALLMARK_DATA_DIR, value: /data}
+              resources:
+                requests: {cpu: 250m, memory: 512Mi}
+                limits: {memory: 2Gi}
+              volumeMounts:
+                - {name: lake, mountPath: /data}
+          volumes:
+            - name: lake
+              persistentVolumeClaim: {claimName: hallmark-lake}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: hallmark-lake
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests: {storage: 20Gi}

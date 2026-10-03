@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: recon-service
+  labels: {app: recon-service, part-of: hallmark}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: recon-service}
+  template:
+    metadata:
+      labels: {app: recon-service, part-of: hallmark}
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /actuator/prometheus
+        prometheus.io/port: "8084"
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+      containers:
+        - name: app
+          image: hallmark/recon-service:latest
+          ports: [{containerPort: 8084, name: http}]
+          envFrom:
+            - configMapRef: {name: hallmark-config}
+          env:
+            - {name: PORT, value: "8084"}
+            - {name: DB_URL, value: "jdbc:postgresql://postgres.hallmark.svc:5432/hallmark?currentSchema=recon"}
+            - name: DB_USER
+              valueFrom: {secretKeyRef: {name: hallmark-db, key: username}}
+            - name: DB_PASSWORD
+              valueFrom: {secretKeyRef: {name: hallmark-db, key: password}}
+          resources:
+            requests: {cpu: 250m, memory: 512Mi}
+            limits: {memory: 1Gi}
+          readinessProbe:
+            httpGet: {path: /actuator/health/readiness, port: http}
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: {path: /actuator/health/liveness, port: http}
+            initialDelaySeconds: 60
+            periodSeconds: 20
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - {name: tmp, mountPath: /tmp}
+      volumes:
+        - {name: tmp, emptyDir: {}}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: recon-service
+spec:
+  selector: {app: recon-service}
+  ports: [{port: 8084, targetPort: http, name: http}]
