@@ -1,0 +1,87 @@
+name: cd
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+  pages: write
+  id-token: write
+
+jobs:
+  publish-images:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - { image: refdata-service, context: services, file: services/Dockerfile }
+          - { image: tradeflow-service, context: services, file: services/Dockerfile }
+          - { image: pricing-service, context: services, file: services/Dockerfile }
+          - { image: recon-service, context: services, file: services/Dockerfile }
+          - { image: insights-api, context: insights-api, file: insights-api/Dockerfile }
+          - { image: web, context: web, file: web/Dockerfile }
+          - { image: ingest, context: ".", file: ingest/Dockerfile }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.file }}
+          build-args: SERVICE=${{ matrix.image }}
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/hallmark-${{ matrix.image }}:${{ github.sha }}
+            ghcr.io/${{ github.repository_owner }}/hallmark-${{ matrix.image }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  pages:
+    runs-on: ubuntu-latest
+    if: vars.PAGES_ENABLED == 'true'
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Build the dashboard against the committed snapshot
+        working-directory: web
+        env:
+          PAGES_BASE: /${{ github.event.repository.name }}/
+        run: npm ci && npm run build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/dist
+      - id: deploy
+        uses: actions/deploy-pages@v4
+
+  deploy-k8s:
+    runs-on: ubuntu-latest
+    needs: publish-images
+    if: vars.KUBE_DEPLOY == 'true'
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/setup-kubectl@v4
+      - name: Apply manifests pinned to this commit
+        env:
+          KUBECONFIG_DATA: ${{ secrets.KUBECONFIG }}
+          SHA: ${{ github.sha }}
+        run: |
+          echo "$KUBECONFIG_DATA" > "$RUNNER_TEMP/kubeconfig"
+          export KUBECONFIG="$RUNNER_TEMP/kubeconfig"
+          kubectl kustomize deploy/k8s/overlays/prod | sed "s/:latest/:$SHA/g" | kubectl apply -f -
+          kubectl -n hallmark rollout status deployment/pricing-service --timeout=300s
