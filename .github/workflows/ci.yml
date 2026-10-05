@@ -1,0 +1,115 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -e "ingest[dev]" -e "insights-api[dev]"
+      - run: ruff check ingest/src ingest/tests insights-api scripts
+      - run: ruff format --check ingest/src ingest/tests insights-api
+      - run: pytest ingest --cov --cov-report=xml
+      - run: pytest insights-api
+      - name: Contracts are up to date
+        run: python scripts/gen_schemas.py && git diff --exit-code contracts/schemas
+
+  java:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+      - name: Build, test and enforce coverage
+        working-directory: services
+        run: ./mvnw -B verify
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jacoco
+          path: services/*/target/site/jacoco
+
+  web:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npx tsc -b
+      - run: npm test
+      - run: npm run build
+
+  warehouse:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: warehouse
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install "dbt-duckdb>=1.9"
+      - run: cp profiles.example.yml profiles.yml && dbt parse --profiles-dir .
+
+  spark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ingest "pyspark>=4.0,<5" pandas pytest
+      - run: pytest analytics/spark/tests
+
+  images:
+    runs-on: ubuntu-latest
+    needs: [python, java, web]
+    strategy:
+      matrix:
+        include:
+          - { image: refdata-service, context: services, file: services/Dockerfile }
+          - { image: tradeflow-service, context: services, file: services/Dockerfile }
+          - { image: pricing-service, context: services, file: services/Dockerfile }
+          - { image: recon-service, context: services, file: services/Dockerfile }
+          - { image: insights-api, context: insights-api, file: insights-api/Dockerfile }
+          - { image: web, context: web, file: web/Dockerfile }
+          - { image: ingest, context: ".", file: ingest/Dockerfile }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.file }}
+          build-args: SERVICE=${{ matrix.image }}
+          push: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

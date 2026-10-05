@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: insights-api
+  labels: {app: insights-api, part-of: hallmark}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: insights-api}
+  template:
+    metadata:
+      labels: {app: insights-api, part-of: hallmark}
+    spec:
+      containers:
+        - name: app
+          image: hallmark/insights-api:latest
+          ports: [{containerPort: 8090, name: http}]
+          readinessProbe:
+            httpGet: {path: /health, port: http}
+          resources:
+            requests: {cpu: 100m, memory: 256Mi}
+            limits: {memory: 1Gi}
+          volumeMounts:
+            - {name: lake, mountPath: /data, readOnly: true}
+      volumes:
+        - name: lake
+          persistentVolumeClaim: {claimName: hallmark-lake}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: insights-api
+spec:
+  selector: {app: insights-api}
+  ports: [{port: 8090, targetPort: http, name: http}]

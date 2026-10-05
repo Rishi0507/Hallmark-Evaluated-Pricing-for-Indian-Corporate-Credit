@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hallmark-config
+data:
+  SPRING_PROFILES_ACTIVE: postgres
+  KAFKA_BOOTSTRAP: kafka-bootstrap.kafka.svc:9092
+  KAFKA_CONCURRENCY: "3"
+  HALLMARK_KAFKA_BOOTSTRAP_SERVERS: kafka-bootstrap.kafka.svc:9092
