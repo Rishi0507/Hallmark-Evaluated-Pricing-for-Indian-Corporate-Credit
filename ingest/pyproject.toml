@@ -11,7 +11,7 @@ requires-python = ">=3.12"
 license = { text = "Apache-2.0" }
 dependencies = [
   "httpx>=0.28",
-  "polars>=1.40,<2",
+  "polars>=1.40,<3",
   "pyarrow>=21",
   "duckdb>=1.5",
   "openpyxl>=3.1",
